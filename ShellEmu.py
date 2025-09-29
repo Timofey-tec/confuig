@@ -1,6 +1,10 @@
 import os
 import tkinter as tk
 from tkinter import scrolledtext
+import argparse
+
+# глобальная конфигурация
+config = {}
 
 def run_command(event=None):
     global out, inpe
@@ -38,8 +42,29 @@ def run_command(event=None):
     out.config(state=tk.DISABLED)
     out.see(tk.END)
 
+def get_config():
+    parser = argparse.ArgumentParser(description="Эмулятор оболочки")
+    parser.add_argument("--vfs", default="default.json", help="Файл виртуальной ФС")
+    parser.add_argument("--debug", action="store_true", help="Включить отладку")
+    parser.add_argument("--name", default="myvfs", help="Имя виртуальной ФС (отображается в приглашении)")
 
-# ---------------- GUI ----------------
+    args = parser.parse_args()
+
+    # Преобразуем в словарь
+    config = {
+        "vfs": args.vfs,
+        "debug": args.debug,
+        "name": args.name
+    }
+    return config
+
+config = get_config()
+
+# отладочный вывод
+print("Параметры эмулятора:")
+for key, value in config.items():
+    print(f"{key} = {value}")
+#GUI
 root = tk.Tk()
 root.title("VFS Emulator")
 root.geometry("800x500")
