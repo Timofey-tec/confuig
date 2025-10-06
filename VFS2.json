@@ -1,0 +1,33 @@
+{
+  "name": "/",
+  "type": "dir",
+  "owner": "root",
+  "children": [
+    {
+      "name": "projects",
+      "type": "dir",
+      "owner": "root",
+      "children": [
+        {
+          "name": "python",
+          "type": "dir",
+          "owner": "dev",
+          "children": [
+            {
+              "name": "readme.txt",
+              "type": "file",
+              "owner": "dev",
+              "content": "вторая вирутальная файловая система для демонастрации работы команды"
+            },
+            {
+              "name": "data.bin",
+              "type": "file",
+              "owner": "dev",
+              "content": "dGVzdCBmaWxl"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

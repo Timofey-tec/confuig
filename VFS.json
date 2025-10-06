@@ -1,27 +1,33 @@
 {
   "name": "/",
   "type": "dir",
+  "owner": "root",
   "children": [
     {
       "name": "home",
       "type": "dir",
+      "owner": "root",
       "children": [
         {
           "name": "user",
           "type": "dir",
+          "owner": "user",
           "children": [
             {
               "name": "docs",
               "type": "dir",
+              "owner": "user",
               "children": [
                 {
                   "name": "note.txt",
                   "type": "file",
+                  "owner": "user",
                   "content": "Мороз и солнце; день чудесный!\nЕще ты дремлешь, друг прелестный —\nПора, красавица, проснись:\nОткрой сомкнуты негой взоры\nНавстречу северной Авроры,\nЗвездою севера явись!\nВечор, ты помнишь, вьюга злилась,\nНа мутном небе мгла носилась;\nЛуна, как бледное пятно,\nСквозь тучи мрачные желтела,\nИ ты печальная сидела —"
                 },
                 {
                   "name": "image.bin",
                   "type": "file",
+                  "owner": "user",
                   "content": "aGVsbG8gd29ybGQ="
                 }
               ]
@@ -32,4 +38,5 @@
     }
   ]
 }
+
 

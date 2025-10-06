@@ -138,6 +138,49 @@ def cmd_head(args):
     return "\n".join(lines[:count])
 
 
+# команда создания новой директории
+def cmd_mkdir(args):
+    if not args:
+        return "Ошибка: нужно указать имя папки"
+    dirname = args[0]
+    node = get_node_by_path(vfs_root, current_path)
+    if not node or node["type"] != "dir":
+        return "Ошибка: не каталог"
+    for child in node.get("children", []):
+        if child["name"] == dirname:
+            return f"Ошибка: '{dirname}' уже существует"
+    new_dir = {"name": dirname, "type": "dir", "children": []}
+    node.setdefault("children", []).append(new_dir)
+    return f"Создан каталог '{dirname}'"
+
+# команда изменения владельца
+def cmd_chown(args):
+    if len(args) < 2:
+        return "Ошибка: нужно указать владельца и имя файла/папки"
+    owner = args[0]
+    target = args[1]
+    target_path = resolve_path(current_path, target)
+    node = get_node_by_path(vfs_root, target_path)
+    if not node:
+        return f"Ошибка: путь {'/'.join(target_path)} не найден"
+    node["owner"] = owner
+    return f"Владелец '{'/'.join(target_path)}' изменён на '{owner}'"
+
+# команда загрузки новой VFS
+def cmd_vfs_load(args):
+    global vfs_root, current_path
+    if not args:
+        return "Ошибка: нужно указать путь к VFS-файлу"
+    path = args[0]
+    new_vfs = load_vfs(path)
+    if not new_vfs:
+        return f"Ошибка: не удалось загрузить '{path}'"
+    vfs_root = new_vfs
+    current_path = ["/"]
+    prompt.config(text=f"user@{config['name']}:/ $ ")
+    return f"Новая VFS успешно загружена из '{path}'"
+
+
 
 # функция выполнения команд
 def run_command(command_line=None):
@@ -180,6 +223,15 @@ def run_command(command_line=None):
 
     elif cmd == "head":
         out.insert(tk.END, cmd_head(args) + "\n")
+
+    elif cmd == "mkdir":
+        out.insert(tk.END, cmd_mkdir(args) + "\n")
+
+    elif cmd == "chown":
+        out.insert(tk.END, cmd_chown(args) + "\n")
+
+    elif cmd == "vfs-load":
+        out.insert(tk.END, cmd_vfs_load(args) + "\n")
 
     else:
         out.insert(tk.END, f"Ошибка: неизвестная команда '{cmd}'\n")

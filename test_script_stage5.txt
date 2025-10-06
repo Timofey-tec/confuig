@@ -1,0 +1,31 @@
+# Тестовый скрипт Этап 5 - демонстрация работы команд
+pwd
+ls
+cd home
+cd user
+cd docs
+mkdir testdir
+ls
+chown user 123.txt
+# изменяем владельца файла
+chown user2 note.txt
+cd testdir
+pwd
+
+# загрузить новую VFS
+vfs-load VFS2.json
+
+ls
+mkdir
+# создать новый каталог в новой VFS
+mkdir testdir
+
+# изменить владельца существующего файла в новой VFS
+chown user2 projects/python/readme.txt
+
+# показать содержимое каталога projects/python
+cd projects/python
+ls
+
+# показать текущий путь
+pwd
