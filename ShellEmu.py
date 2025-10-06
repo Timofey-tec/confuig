@@ -76,7 +76,7 @@ def resolve_path(current, target):
                 parts.append(p)
     return parts
 
-
+#команда для просмотра содержимого директории
 def cmd_ls(args):
     node = get_node_by_path(vfs_root, current_path)
     if not node or node["type"] != "dir":
@@ -89,7 +89,7 @@ def cmd_ls(args):
             result.append(child["name"])
     return "\n".join(result) if result else "(пусто)"
 
-
+#команда для перемещения по директориям 
 def cmd_cd(args):
     global current_path
     if not args:
@@ -103,7 +103,7 @@ def cmd_cd(args):
     prompt.config(text=f"user@{config['name']}:{'/'.join(current_path) if len(current_path) > 1 else '/'} $ ")
     return "Текущий путь: " + "/".join(current_path[1:]) if len(current_path) > 1 else "/"
 
-
+# команда для чтения содержимого файла 
 def cmd_cat(args):
     if not args:
         return "Ошибка: нужно указать имя файла"
@@ -117,6 +117,27 @@ def cmd_cat(args):
         return decoded
     except Exception:
         return content
+#команда показывает текущий путь     
+def cmd_pwd():
+    return "/".join(current_path) if len(current_path) > 1 else "/"
+#вывод первых 10 строк текстового файла
+def cmd_head(args):
+    if not args:
+        return "Ошибка: нужно указать имя файла"
+    target_path = resolve_path(current_path, args[0])
+    node = get_node_by_path(vfs_root, target_path)
+    if not node or node["type"] != "file":
+        return f"Ошибка: файл {'/'.join(target_path)} не найден"
+    content = node.get("content", "")
+    try:
+        text = base64.b64decode(content).decode("utf-8")
+    except Exception:
+        text = content
+    lines = text.splitlines()
+    count = int(args[1]) if len(args) > 1 and args[1].isdigit() else 10
+    return "\n".join(lines[:count])
+
+
 
 # функция выполнения команд
 def run_command(command_line=None):
@@ -154,6 +175,11 @@ def run_command(command_line=None):
         out.insert(tk.END, "Текущая конфигурация:\n")
         for key, value in config.items():
             out.insert(tk.END, f"{key} = {value}\n")
+    elif cmd == "pwd":
+        out.insert(tk.END, cmd_pwd() + "\n")
+
+    elif cmd == "head":
+        out.insert(tk.END, cmd_head(args) + "\n")
 
     else:
         out.insert(tk.END, f"Ошибка: неизвестная команда '{cmd}'\n")
